@@ -1,0 +1,30 @@
+start: language_declaration definition*
+
+// Comments
+//_anycharacters: /.+/
+//_NEWLINE: /\n/
+//comment: "#" _anycharacters _NEWLINE
+//inlinecomment: /(?<!^#)(?<!^\s#)#.*\n/ //doesn't work, matches also comment on new line
+
+// language declaration with any comments
+language_declaration: _language_declaration
+_language_declaration: "l_" LANGUAGE ":"
+LANGUAGE: "braz_por" | "english" | "french" | "german" | "polish" | "russian" | "spanish"
+
+// entry and definition
+// entry character
+ECHAR: ("." | "_" | LETTER | DIGIT)+
+ENTRY: ECHAR+
+_definition: ENTRY ":" INT localization
+definition: _definition
+
+// misc definitions
+localization: STRING
+STRING: /".*"/
+%import common.INT              -> INT
+%import common.LETTER           -> LETTER
+%import common.DIGIT            -> DIGIT
+%import common.WS
+COMMENT: "#" /[^\n]/*
+%ignore COMMENT
+%ignore WS
